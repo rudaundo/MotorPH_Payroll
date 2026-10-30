@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import others.currentDate;
-import others.currentTime;
+import util.currentDate;
+import util.currentTime;
 import javax.swing.JOptionPane;
 
 import payrollhub.data.CsvHandler;
@@ -236,6 +236,12 @@ public class GUILogin extends javax.swing.JFrame {
             } else if ("Regular".equalsIgnoreCase(user.getrole())) {
 
                 GUIEmpDashboard nextForm = new GUIEmpDashboard(empID);
+
+                nextForm.setVisible(true);
+
+            } else if ("Accounting".equalsIgnoreCase(user.getrole())) {
+
+                GUIAcctgDashboard nextForm = new GUIAcctgDashboard(empID);
 
                 nextForm.setVisible(true);
 
