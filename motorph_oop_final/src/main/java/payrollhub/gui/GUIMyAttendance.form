@@ -168,13 +168,13 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="13" pref="26" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="text_position" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="text_id" pref="133" max="32767" attributes="0"/>
                               <Component id="text_name" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="text_position" min="-2" pref="264" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="151" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="20" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -259,7 +259,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="0" y="0" width="660" height="590"/>
+          <AbsoluteConstraints x="0" y="0" width="650" height="600"/>
         </Constraint>
       </Constraints>
     </Component>

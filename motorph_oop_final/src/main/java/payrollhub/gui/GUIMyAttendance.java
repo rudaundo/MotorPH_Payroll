@@ -233,11 +233,11 @@ public class GUIMyAttendance extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(13, 26, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(text_position, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(text_id, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                            .addComponent(text_name)))
-                    .addGap(0, 151, Short.MAX_VALUE)))
+                            .addComponent(text_name))
+                        .addComponent(text_position, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(0, 20, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +262,7 @@ public class GUIMyAttendance extends javax.swing.JFrame {
 
         background.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + ("\\src\\main\\java\\images\\bluebg.png")));
         background.setPreferredSize(new java.awt.Dimension(900, 600));
-        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 590));
+        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

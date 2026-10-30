@@ -38,7 +38,10 @@ public final class CsvHandler {
             DATA_DIR.resolve("attendance.csv");
     
     public static final Path LEAVE_FILE =
-            DATA_DIR.resolve("leave.csv");
+            DATA_DIR.resolve("leaves.csv");
+    
+    public static final Path OVERTIME_FILE =
+        DATA_DIR.resolve("overtime.csv");
 
     // CSV headers
     private static final String[] EMPLOYEE_HEADER = {
@@ -64,6 +67,27 @@ public final class CsvHandler {
         "logIn",
         "logOut"
     };
+    
+    private static final String[] LEAVE_HEADER = {
+        "leaveID",
+        "employeeID",
+        "type",
+        "startDate",
+        "endDate",
+        "status",
+        "reason"
+    };
+    
+    private static final String[] OVERTIME_HEADER = {
+        "overtimeID",
+        "employeeID",
+        "overtimeDate",
+        "startTime",
+        "endTime",
+        "totalHours",
+        "reason",
+        "status"
+    };
 
     // Prevent creating objects of this class
     public CsvHandler() {
@@ -86,6 +110,8 @@ public final class CsvHandler {
         initializeFile(EMPLOYEE_FILE, EMPLOYEE_HEADER);
         initializeFile(USERS_FILE, USERS_HEADER);
         initializeFile(ATTENDANCE_FILE, ATTENDANCE_HEADER);
+        initializeFile(LEAVE_FILE, LEAVE_HEADER);
+        initializeFile(OVERTIME_FILE, OVERTIME_HEADER);
     }
 
     private static void initializeFile(
@@ -98,6 +124,8 @@ public final class CsvHandler {
             writeAll(file, header, new ArrayList<>());
         }
     }
+    
+    
 
     // =====================================================
     // EMPLOYEE OPERATIONS
@@ -250,6 +278,66 @@ public final class CsvHandler {
                 attendance
         );
     }
+    
+    // =====================================================
+    // LEAVE OPERATIONS
+    // =====================================================
+
+    public static List<String[]> readLeaves() throws IOException {
+
+        return readAll(LEAVE_FILE);
+    }
+
+    public static void writeLeaves(
+            List<String[]> leaves
+    ) throws IOException {
+
+        writeAll(
+                LEAVE_FILE,
+                LEAVE_HEADER,
+                leaves
+        );
+    }
+
+    public static void appendLeave(
+            String[] leave
+    ) throws IOException {
+
+        appendRecord(
+                LEAVE_FILE,
+                LEAVE_HEADER,
+                leave
+        );
+    }
+
+    public static boolean updateLeave(
+            String leaveID,
+            String[] updatedLeave
+    ) throws IOException {
+
+        return updateRecord(
+                LEAVE_FILE,
+                LEAVE_HEADER,
+                leaveID,
+                updatedLeave
+        );
+    }
+    
+    // =====================================================
+    // OVERTIME OPERATIONS
+    // =====================================================
+
+    public static List<String[]> readOvertime() throws IOException {
+        return readAll(OVERTIME_FILE);
+    }
+
+    public static void appendOvertime(String[] overtime) throws IOException {
+        appendRecord(
+                OVERTIME_FILE,
+                OVERTIME_HEADER,
+                overtime
+        );
+    }
 
     // =====================================================
     // GENERIC CSV READING
@@ -365,6 +453,24 @@ public final class CsvHandler {
         boolean needsHeader =
                 !Files.exists(file) || Files.size(file) == 0;
 
+        // Check whether the existing file ends with a newline.
+        boolean needsNewLine = false;
+
+        if (!needsHeader) {
+
+            try (var input = Files.newInputStream(file)) {
+
+                long size = Files.size(file);
+
+                input.skip(size - 1);
+
+                int lastByte = input.read();
+
+                needsNewLine =
+                        lastByte != '\n' && lastByte != '\r';
+            }
+        }
+
         try (BufferedWriter writer = Files.newBufferedWriter(
                 file,
                 StandardCharsets.UTF_8,
@@ -375,6 +481,9 @@ public final class CsvHandler {
 
             if (needsHeader) {
                 writer.write(toCsvLine(header));
+                writer.newLine();
+
+            } else if (needsNewLine) {
                 writer.newLine();
             }
 
