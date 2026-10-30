@@ -238,7 +238,7 @@ public class GUIEmpDashboard extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + ("\\src\\main\\java\\images\\bluebg.png")));
         jLabel1.setPreferredSize(new java.awt.Dimension(900, 600));
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 580));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 370, 580));
 
         jMenu1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenu1.setText("Employee Management");
@@ -275,11 +275,29 @@ public class GUIEmpDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jb_empDashSignoutActionPerformed
 
     private void jb_empDashLeaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashLeaveActionPerformed
-        // TODO add your handling code here:
+
+        String employeeID = text_id.getText().trim();
+        
+        GUILeave nextForm = null;
+        try {
+            nextForm = new GUILeave(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIEmpDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIEmpDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
+        
     }//GEN-LAST:event_jb_empDashLeaveActionPerformed
 
     private void jb_empDashOvertimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashOvertimeActionPerformed
-        // TODO add your handling code here:
+        
+        String employeeID = text_id.getText().trim();
+        
+        GUIOvertime nextForm = new GUIOvertime(employeeID);
+        nextForm.setVisible(true); 
+        
     }//GEN-LAST:event_jb_empDashOvertimeActionPerformed
 
     private void jb_empDashTimesheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashTimesheetActionPerformed

@@ -5,6 +5,7 @@
 
 package payrollhub.service;
 
+import java.awt.Window;
 import javax.swing.JFrame;
 import payrollhub.gui.GUILogin;
 
@@ -14,17 +15,19 @@ import payrollhub.gui.GUILogin;
  */
 public class LogoutHandler {
     
-    public void logout(JFrame currentForm){
-        
-        //open the Login GUI
-        
+   public void logout(JFrame currentForm) {
+
+        // Open the Login GUI
         GUILogin loginForm = new GUILogin();
+        loginForm.setLocationRelativeTo(null);
         loginForm.setVisible(true);
-        
-        currentForm.dispose();
-        
-        
-        
+
+        // Close all other open windows
+        for (Window window : Window.getWindows()) {
+
+            if (window != loginForm) {
+                window.dispose();
+            }
+        }
     }
-    
 }
