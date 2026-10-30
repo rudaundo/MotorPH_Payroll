@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import payrollhub.data.CsvHandler;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class OvertimeService {
 
@@ -141,6 +143,62 @@ public class OvertimeService {
         }
 
         return false;
+    }
+    
+    public BigDecimal getApprovedOvertimeHours(
+        String employeeID,
+        LocalDate periodStart,
+        LocalDate periodEnd
+    ) throws IOException {
+
+        List<String[]> records = CsvHandler.readOvertime();
+
+        BigDecimal totalHours = BigDecimal.ZERO;
+
+        for (String[] row : records) {
+
+            if (row.length < 8) {
+                continue;
+            }
+
+            String empNo = row[1].trim();
+            String dateValue = row[2].trim();
+            String hoursValue = row[5].trim();
+            String status = row[7].trim();
+
+            // Match employee
+            if (!empNo.equals(employeeID.trim())) {
+                continue;
+            }
+
+            // Only approved overtime
+            if (!status.equalsIgnoreCase("APPROVED")) {
+                continue;
+            }
+
+            LocalDate overtimeDate;
+
+            try {
+                overtimeDate = LocalDate.parse(dateValue);
+            } catch (java.time.format.DateTimeParseException e) {
+                continue;
+            }
+
+            // Check payroll period
+            if (overtimeDate.isBefore(periodStart)
+                    || overtimeDate.isAfter(periodEnd)) {
+                continue;
+            }
+
+            try {
+                BigDecimal hours = new BigDecimal(hoursValue);
+                totalHours = totalHours.add(hours);
+            } catch (NumberFormatException e) {
+                continue;
+            }
+        }
+
+        return totalHours.setScale(2, RoundingMode.HALF_UP);
     }
     
 }

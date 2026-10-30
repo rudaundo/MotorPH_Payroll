@@ -42,16 +42,29 @@ public final class CsvHandler {
     
     public static final Path OVERTIME_FILE =
         DATA_DIR.resolve("overtime.csv");
+    
+    public static final Path PAYROLL_FILE =
+        DATA_DIR.resolve("payroll.csv");
 
     // CSV headers
     private static final String[] EMPLOYEE_HEADER = {
         "empNo",
-        "firstName",
         "lastName",
+        "firstName",
         "birthday",
         "address",
-        "phoneNumber",
-        "position"
+        "phone",
+        "sss",
+        "philhealth",
+        "tin",
+        "pagibig",
+        "status",
+        "position",
+        "supervisor",
+        "basicSalary",
+        "riceSubsidy",
+        "phoneAllowance",
+        "clothingAllowance"
     };
 
     private static final String[] USERS_HEADER = {
@@ -88,6 +101,30 @@ public final class CsvHandler {
         "reason",
         "status"
     };
+    
+    private static final String[] PAYROLL_HEADER = {
+        "empNo",
+        "employeeName",
+        "position",
+        "periodStart",
+        "periodEnd",
+        "monthlySalary",
+        "dailyRate",
+        "daysWorked",
+        "overtimePay",
+        "grossIncome",
+        "riceSubsidy",
+        "phoneAllowance",
+        "clothingAllowance",
+        "totalBenefits",
+        "sss",
+        "philhealth",
+        "pagibig",
+        "withholdingTax",
+        "otherDeductions",
+        "totalDeductions",
+        "takeHomePay"
+    };
 
     // Prevent creating objects of this class
     public CsvHandler() {
@@ -112,6 +149,7 @@ public final class CsvHandler {
         initializeFile(ATTENDANCE_FILE, ATTENDANCE_HEADER);
         initializeFile(LEAVE_FILE, LEAVE_HEADER);
         initializeFile(OVERTIME_FILE, OVERTIME_HEADER);
+        initializeFile(PAYROLL_FILE, PAYROLL_HEADER);
     }
 
     private static void initializeFile(
@@ -336,6 +374,30 @@ public final class CsvHandler {
                 OVERTIME_FILE,
                 OVERTIME_HEADER,
                 overtime
+        );
+    }
+    
+    // =====================================================
+    // PAYROLL OPERATIONS
+    // =====================================================
+
+    /**
+     * Reads all payroll records.
+     */
+    public static List<String[]> readPayroll() throws IOException {
+
+        return readAll(PAYROLL_FILE);
+    }
+
+    /**
+     * Adds a completed payroll record.
+     */
+    public static void appendPayroll(String[] payroll) throws IOException {
+
+        appendRecord(
+                PAYROLL_FILE,
+                PAYROLL_HEADER,
+                payroll
         );
     }
 

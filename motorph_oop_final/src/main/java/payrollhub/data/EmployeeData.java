@@ -130,7 +130,7 @@ public class EmployeeData {
     public void setFirstName(String firstName)         { this.firstName = requireText(firstName, "First Name");}
     public void setPosition(String position)            { this.position = requireText(position, "Position");}
     public void setStatus(String status)                { this.status = requireText(status, "Status");}
-    public void setAddress(String address)             { this.address = requireDigits(address, "Address");}
+    public void setAddress(String address)             { this.address = requireText(address, "Address");}
     public void setPhone(String phone)                 { this.phone = requireDigits(phone, "Phone Number");}
     public void setSss(String sss)                      { this.sss = requireDigits(sss, "SSS");}
     public void setPhilhealth(String philhealth)        { this.philhealth = requireDigits(philhealth, "PhilHealth");}

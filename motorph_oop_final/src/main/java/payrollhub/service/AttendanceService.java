@@ -15,8 +15,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import payrollhub.data.CsvHandler;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AttendanceService {
+    
 
     private final Path csvFile;
 
@@ -240,5 +244,73 @@ public class AttendanceService {
             return null;
         }
     }
+    
+    // =====================================================
+    // PAYROLL ATTENDANCE
+    // =====================================================
+
+    /**
+     * Counts completed attendance days within a payroll period.
+     */
+    public int countDaysWorked(
+        String employeeID,
+        LocalDate periodStart,
+        LocalDate periodEnd
+        ) throws IOException {
+
+            if (employeeID == null || periodStart == null || periodEnd == null
+                    || periodEnd.isBefore(periodStart)) {
+
+                throw new IllegalArgumentException(
+                        "Invalid employee ID or payroll period."
+                );
+            }
+
+            List<String> lines = Files.readAllLines(
+                    csvFile,
+                    StandardCharsets.UTF_8
+            );
+
+            Set<LocalDate> workedDates = new HashSet<>();
+
+            for (int i = 1; i < lines.size(); i++) {
+
+                String[] row = lines.get(i).split(",", -1);
+
+                if (row.length < 4) {
+                    continue;
+                }
+
+                String empNo = row[0].trim();
+                String dateValue = row[1].trim();
+                String logIn = row[2].trim();
+                String logOut = row[3].trim();
+
+                if (!empNo.equals(employeeID.trim())) {
+                    continue;
+                }
+
+                if (logIn.isEmpty() || logOut.isEmpty()) {
+                    continue;
+                }
+
+                try {
+
+                    LocalDate attendanceDate =
+                            LocalDate.parse(dateValue, DATE_FORMAT);
+
+                    if (!attendanceDate.isBefore(periodStart)
+                            && !attendanceDate.isAfter(periodEnd)) {
+
+                        workedDates.add(attendanceDate);
+                    }
+
+                } catch (java.time.format.DateTimeParseException e) {
+                    continue;
+                }
+            }
+
+            return workedDates.size();
+        }
     
 }

@@ -1,1 +1,4 @@
 overtimeID,employeeID,overtimeDate,startTime,endTime,totalHours,reason,status
+OT0001,10015,2024-06-05,18:00,20:00,2.00,Month-end reporting,APPROVED
+OT0002,10015,2024-06-07,18:00,21:00,3.00,Inventory reconciliation,PENDING
+OT0003,10015,2024-06-10,18:00,20:00,2.00,Financial reporting,APPROVED
