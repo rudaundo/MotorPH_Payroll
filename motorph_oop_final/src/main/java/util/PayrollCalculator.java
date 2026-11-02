@@ -30,9 +30,7 @@ public class PayrollCalculator {
     }
 
     public Payroll calculate(
-            EmployeeData employee, LocalDate periodStart, LocalDate periodEnd,
-            int daysWorked, BigDecimal overtimePay, BigDecimal sss, BigDecimal philhealth,
-            BigDecimal pagibig, BigDecimal withholdingTax, BigDecimal otherDeductions) {
+            EmployeeData employee, LocalDate periodStart, LocalDate periodEnd, int daysWorked, BigDecimal overtimePay, BigDecimal sss, BigDecimal philhealth, BigDecimal pagibig, BigDecimal withholdingTax, BigDecimal otherDeductions, BigDecimal otherDeductions1) {
 
         if (employee == null) {
             throw new IllegalArgumentException("Employee is required.");
@@ -43,7 +41,7 @@ public class PayrollCalculator {
             throw new IllegalArgumentException("Invalid payroll period.");
         }
 
-        if (daysWorked < 0 || daysWorked > 20) {
+        if (daysWorked < 0 || daysWorked > 31) {
             throw new IllegalArgumentException(
                     "Days worked must be between 0 and 20.");
         }
@@ -93,8 +91,20 @@ public class PayrollCalculator {
         BigDecimal validSss = money(sss);
         BigDecimal validPhilhealth = money(philhealth);
         BigDecimal validPagibig = money(pagibig);
-        BigDecimal validTax = money(withholdingTax);
         BigDecimal validOther = money(otherDeductions);
+        
+        // Regular taxable compensation
+        BigDecimal regularTaxableCompensation = basicPay
+                .subtract(validSss)
+                .subtract(validPhilhealth)
+                .subtract(validPagibig)
+                .max(BigDecimal.ZERO);
+
+        // Overtime is supplementary compensation
+        BigDecimal validTax = calculateSemiMonthlyTax(
+                regularTaxableCompensation,
+                validOvertimePay
+        );
 
         BigDecimal totalDeductions = validSss
                 .add(validPhilhealth)
@@ -133,6 +143,59 @@ public class PayrollCalculator {
                 takeHomePay
         );
     }
+    
+        public BigDecimal calculateSemiMonthlyTax(
+            BigDecimal regularTaxableCompensation,
+            BigDecimal supplementaryCompensation) {
+
+        BigDecimal regular = regularTaxableCompensation.max(BigDecimal.ZERO);
+        BigDecimal supplementary = supplementaryCompensation.max(BigDecimal.ZERO);
+
+        BigDecimal tax = BigDecimal.ZERO;
+        BigDecimal taxBase = BigDecimal.ZERO;
+        BigDecimal rate = BigDecimal.ZERO;
+
+        if (regular.compareTo(new BigDecimal("10417")) <= 0) {
+            taxBase = new BigDecimal("10417");
+            rate = BigDecimal.ZERO;
+
+        } else if (regular.compareTo(new BigDecimal("16667")) <= 0) {
+            taxBase = new BigDecimal("10417");
+            rate = new BigDecimal("0.15");
+
+        } else if (regular.compareTo(new BigDecimal("33333")) <= 0) {
+            taxBase = new BigDecimal("16667");
+            tax = new BigDecimal("937.50");
+            rate = new BigDecimal("0.20");
+
+        } else if (regular.compareTo(new BigDecimal("83333")) <= 0) {
+            taxBase = new BigDecimal("33333");
+            tax = new BigDecimal("4270.70");
+            rate = new BigDecimal("0.25");
+
+        } else if (regular.compareTo(new BigDecimal("333333")) <= 0) {
+            taxBase = new BigDecimal("83333");
+            tax = new BigDecimal("16770.70");
+            rate = new BigDecimal("0.30");
+
+        } else {
+            taxBase = new BigDecimal("333333");
+            tax = new BigDecimal("91770.70");
+            rate = new BigDecimal("0.35");
+        }
+
+    // Tax on regular compensation
+    BigDecimal excessRegular = regular.subtract(taxBase);
+
+    if (excessRegular.signum() > 0) {
+        tax = tax.add(excessRegular.multiply(rate));
+    }
+
+    // Tax on supplementary compensation, such as overtime
+    tax = tax.add(supplementary.multiply(rate));
+
+    return tax.setScale(2, RoundingMode.HALF_UP);
+}
     
     public BigDecimal calculateOvertimePay(
                 BigDecimal monthlySalary,

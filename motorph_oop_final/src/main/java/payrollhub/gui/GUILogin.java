@@ -222,16 +222,11 @@ public class GUILogin extends javax.swing.JFrame {
             
 
             // Open the appropriate dashboard
-            if ("Admin".equalsIgnoreCase(user.getrole())) {
+            if ("HumanResources".equalsIgnoreCase(user.getrole())) {
 
-                // Replace this with your actual Admin dashboard.
-                // Example:
-                // new admindashboard(empID).setVisible(true);
+                GUIHRDashboard nextForm = new GUIHRDashboard(empID);
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Admin dashboard is not yet connected."
-                );
+                nextForm.setVisible(true);
 
             } else if ("Regular".equalsIgnoreCase(user.getrole())) {
 

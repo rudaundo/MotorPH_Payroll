@@ -357,15 +357,51 @@ public class GUIAcctgDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_text_idActionPerformed
 
     private void jb_taxReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_taxReportActionPerformed
-        // TODO add your handling code here:
+      
+        String employeeID = text_id.getText().trim();
+        
+        GUIAcctgTaxReport nextForm = null;
+        try {
+            nextForm = new GUIAcctgTaxReport(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
     }//GEN-LAST:event_jb_taxReportActionPerformed
 
     private void jb_deductionReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_deductionReportActionPerformed
-        // TODO add your handling code here:
+        
+        String employeeID = text_id.getText().trim();
+        
+        GUIAcctgDedReport nextForm = null;
+        try {
+            nextForm = new GUIAcctgDedReport(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
     }//GEN-LAST:event_jb_deductionReportActionPerformed
 
     private void jb_batchPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_batchPayrollActionPerformed
-        // TODO add your handling code here:
+        
+        String employeeID = text_id.getText().trim();
+        
+        GUIAcctgPayrollGen nextForm = null;
+        try {
+            nextForm = new GUIAcctgPayrollGen(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIAcctgDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
     }//GEN-LAST:event_jb_batchPayrollActionPerformed
 
     /**

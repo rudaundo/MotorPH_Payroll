@@ -18,6 +18,8 @@ import payrollhub.data.CsvHandler;
 import payrollhub.data.EmployeeData;
 import payrollhub.pojo.Payroll;
 import util.PayrollCalculator;
+import payrollhub.pojo.TaxReport;
+import payrollhub.pojo.DeductionReport;
 
 public class PayrollService {
 
@@ -26,6 +28,8 @@ public class PayrollService {
     private final AttendanceService attendanceService;
     
     private final OvertimeService overtimeService;
+    
+    private final DeductionCalculator deductionCalculator;
     
 
     public PayrollService() {
@@ -36,6 +40,8 @@ public class PayrollService {
         );
         
         this.overtimeService = new OvertimeService();
+        
+        this.deductionCalculator = new DeductionCalculator();
     }
 
     // Retrieve an employee from employee.csv
@@ -103,6 +109,19 @@ public class PayrollService {
         );
 
                 BigDecimal monthlySalary = BigDecimal.valueOf(employee.getBasicSalary());
+                
+                    BigDecimal monthlySSS = deductionCalculator.calculateSSS(monthlySalary);
+
+                    BigDecimal monthlyPhilHealth = deductionCalculator.calculatePhilHealth(monthlySalary);
+
+                    BigDecimal monthlyPagIBIG = deductionCalculator.calculatePagIBIG(monthlySalary);
+
+                    // Allocate monthly contributions to one payroll cutoff
+                    BigDecimal calculatedSSS = deductionCalculator.calculatePerCutoff(monthlySSS);
+
+                    BigDecimal calculatedPhilHealth = deductionCalculator.calculatePerCutoff(monthlyPhilHealth);
+
+                    BigDecimal calculatedPagIBIG = deductionCalculator.calculatePerCutoff(monthlyPagIBIG);
 
                 BigDecimal calculatedOvertimePay = calculator.calculateOvertimePay(
                         monthlySalary,
@@ -119,9 +138,10 @@ public class PayrollService {
                 periodEnd,
                 daysWorked,
                 calculatedOvertimePay,
-                sss,
-                philhealth,
-                pagibig,
+                calculatedOvertimePay,
+                calculatedSSS,
+                calculatedPhilHealth,
+                calculatedPagIBIG,
                 withholdingTax,
                 otherDeductions
         );
@@ -160,6 +180,79 @@ public class PayrollService {
             payroll.getTakeHomePay().toPlainString()
         };
     }
+    
+    // Retrieve a payslip for one employee using a selected date
+        public Payroll getPayslip(String empNo, LocalDate selectedDate)
+                throws IOException {
+
+            List<String[]> payrollRecords = CsvHandler.readPayroll();
+
+            for (String[] row : payrollRecords) {
+
+                // Make sure the CSV row contains all 21 payroll columns
+                if (row.length < 21) {
+                    continue;
+                }
+
+                String recordEmpNo = row[0].trim();
+
+                // Only retrieve the logged-in employee's payroll
+                if (!recordEmpNo.equals(empNo.trim())) {
+                    continue;
+                }
+
+                try {
+
+                    LocalDate periodStart = LocalDate.parse(row[3].trim());
+                    LocalDate periodEnd = LocalDate.parse(row[4].trim());
+
+                    // Check whether the selected date is within the payroll period
+                    boolean matchesDate =
+                            !selectedDate.isBefore(periodStart)
+                            && !selectedDate.isAfter(periodEnd);
+
+                    if (!matchesDate) {
+                        continue;
+                    }
+
+                    // Reconstruct the Payroll object using the existing CSV columns
+                    return new Payroll(
+                            row[0].trim(),                 // Employee number
+                            row[1].trim(),                 // Employee name
+                            row[2].trim(),                 // Position
+                            periodStart,                   // Period start
+                            periodEnd,                     // Period end
+                            parseAmount(row[5]),            // Monthly salary
+                            parseAmount(row[6]),            // Daily rate
+                            Integer.parseInt(row[7].trim()),// Days worked
+                            parseAmount(row[8]),            // Overtime pay
+                            parseAmount(row[9]),            // Gross income
+                            parseAmount(row[10]),           // Rice subsidy
+                            parseAmount(row[11]),           // Phone allowance
+                            parseAmount(row[12]),           // Clothing allowance
+                            parseAmount(row[13]),           // Total benefits
+                            parseAmount(row[14]),           // SSS
+                            parseAmount(row[15]),           // PhilHealth
+                            parseAmount(row[16]),           // Pag-IBIG
+                            parseAmount(row[17]),           // Withholding tax
+                            parseAmount(row[18]),           // Other deductions
+                            parseAmount(row[19]),           // Total deductions
+                            parseAmount(row[20])            // Take-home pay
+                    );
+
+                } catch (java.time.format.DateTimeParseException
+                        | NumberFormatException e) {
+
+                    System.err.println(
+                            "Skipping invalid payroll record for employee "
+                            + recordEmpNo + ": " + e.getMessage()
+                    );
+                }
+            }
+
+            // No matching payroll record was found
+            return null;
+        }
     
     public List<Payroll> processBatchPayroll(
             LocalDate periodStart,
@@ -211,4 +304,186 @@ public class PayrollService {
 
         return generatedPayrolls;
     }
-}
+    
+    // Retrieve tax reports for all employees within a date range
+    public List<TaxReport> getTaxReports(
+            LocalDate startDate,
+            LocalDate endDate
+    ) throws IOException {
+
+        return getTaxReports(startDate, endDate, null);
+    }
+
+
+    // Retrieve tax reports for a specific employee or all employees
+        public List<TaxReport> getTaxReports(
+                LocalDate startDate,
+                LocalDate endDate,
+                String empNo
+        ) throws IOException {
+
+            List<String[]> payrollRecords = CsvHandler.readPayroll();
+            List<TaxReport> taxReports = new ArrayList<>();
+
+            for (String[] row : payrollRecords) {
+
+                // Ensure all required CSV columns are present
+                if (row.length < 21) {
+                    continue;
+                }
+
+                String recordEmpNo = row[0].trim();
+
+                // Filter by employee when an employee ID is provided
+                if (empNo != null
+                        && !empNo.isBlank()
+                        && !recordEmpNo.equals(empNo.trim())) {
+
+                    continue;
+                }
+
+                try {
+
+                    LocalDate periodStart = LocalDate.parse(row[3].trim());
+                    LocalDate periodEnd = LocalDate.parse(row[4].trim());
+
+                    // Include payroll periods overlapping the selected dates
+                    boolean matchesDate =
+                            !periodEnd.isBefore(startDate)
+                            && !periodStart.isAfter(endDate);
+
+                    if (!matchesDate) {
+                        continue;
+                    }
+
+                    BigDecimal grossIncome =
+                            parseAmount(row[9]);
+
+                    BigDecimal withholdingTax =
+                            parseAmount(row[17]);
+
+                    BigDecimal totalDeductions =
+                            parseAmount(row[19]);
+
+                    TaxReport report = new TaxReport(
+                            recordEmpNo,
+                            row[1].trim(),
+                            periodStart,
+                            periodEnd,
+                            grossIncome,
+                            withholdingTax,
+                            totalDeductions
+                    );
+
+                    taxReports.add(report);
+
+                } catch (java.time.format.DateTimeParseException
+                        | NumberFormatException e) {
+
+                    System.err.println(
+                            "Skipping invalid payroll record for employee "
+                            + recordEmpNo + ": " + e.getMessage()
+                    );
+                }
+            }
+
+            return taxReports;
+        }
+
+
+        // Convert a CSV amount into BigDecimal
+        private BigDecimal parseAmount(String value) {
+
+            if (value == null || value.isBlank()) {
+                return BigDecimal.ZERO;
+            }
+
+            return new BigDecimal(value.trim());
+        }
+        
+        // Retrieve deduction reports for all employees
+        public List<DeductionReport> getDeductionReports(
+                LocalDate startDate,
+                LocalDate endDate
+        ) throws IOException {
+
+            return getDeductionReports(startDate, endDate, null);
+        }
+
+
+        // Retrieve deduction reports for a specific employee or all employees
+        public List<DeductionReport> getDeductionReports(
+                LocalDate startDate,
+                LocalDate endDate,
+                String empNo
+        ) throws IOException {
+
+            List<String[]> payrollRecords = CsvHandler.readPayroll();
+
+            List<DeductionReport> deductionReports = new ArrayList<>();
+
+            for (String[] row : payrollRecords) {
+
+                if (row.length < 21) {
+                    continue;
+                }
+
+                String recordEmpNo = row[0].trim();
+
+                // Filter selected employee
+                if (empNo != null
+                        && !empNo.isBlank()
+                        && !recordEmpNo.equals(empNo.trim())) {
+
+                    continue;
+                }
+
+                try {
+
+                    LocalDate periodStart = LocalDate.parse(row[3].trim());
+                    LocalDate periodEnd = LocalDate.parse(row[4].trim());
+
+                    // Include payroll periods overlapping selected dates
+                    boolean matchesDate =
+                            !periodEnd.isBefore(startDate)
+                            && !periodStart.isAfter(endDate);
+
+                    if (!matchesDate) {
+                        continue;
+                    }
+
+                    BigDecimal sss = parseAmount(row[14]);
+                    BigDecimal philhealth = parseAmount(row[15]);
+                    BigDecimal pagibig = parseAmount(row[16]);
+                    BigDecimal withholdingTax = parseAmount(row[17]);
+                    BigDecimal otherDeductions = parseAmount(row[18]);
+                    BigDecimal totalDeductions = parseAmount(row[19]);
+
+                    DeductionReport report = new DeductionReport(
+                            recordEmpNo,
+                            row[1].trim(),
+                            periodStart,
+                            periodEnd,
+                            sss,
+                            philhealth,
+                            pagibig,
+                            withholdingTax,
+                            otherDeductions,
+                            totalDeductions
+                    );
+
+                    deductionReports.add(report);
+
+                } catch (java.time.format.DateTimeParseException
+                        | NumberFormatException e) {
+
+                    System.err.println(
+                            "Skipping invalid deduction record for employee "
+                            + recordEmpNo + ": " + e.getMessage()
+                    );
+                }
+            }
+
+            return deductionReports;
+        }
+    }

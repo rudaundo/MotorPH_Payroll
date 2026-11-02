@@ -264,7 +264,19 @@ public class GUIEmpDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_text_nameActionPerformed
 
     private void jb_empDashPayslipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashPayslipActionPerformed
-        // TODO add your handling code here:
+      
+        String employeeID = text_id.getText().trim();
+        
+        GUIPaySlip nextForm = null;
+        try {
+            nextForm = new GUIPaySlip(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIEmpDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIEmpDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
     }//GEN-LAST:event_jb_empDashPayslipActionPerformed
 
     private void jb_empDashSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashSignoutActionPerformed
