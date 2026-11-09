@@ -239,6 +239,12 @@ public class GUILogin extends javax.swing.JFrame {
                 GUIAcctgDashboard nextForm = new GUIAcctgDashboard(empID);
 
                 nextForm.setVisible(true);
+                
+            } else if ("Chief".equalsIgnoreCase(user.getrole())) {
+
+                GUIAcctgDashboard nextForm = new GUIAcctgDashboard(empID);
+
+                nextForm.setVisible(true);
 
             } else {
 
