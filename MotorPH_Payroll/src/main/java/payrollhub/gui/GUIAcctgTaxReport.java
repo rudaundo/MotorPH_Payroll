@@ -412,6 +412,7 @@ public class GUIAcctgTaxReport extends javax.swing.JFrame {
 
     private void jb_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cancelActionPerformed
 
+
         
     }//GEN-LAST:event_jb_cancelActionPerformed
 

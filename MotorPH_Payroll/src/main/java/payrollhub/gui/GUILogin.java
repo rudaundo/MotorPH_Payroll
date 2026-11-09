@@ -77,7 +77,7 @@ public class GUILogin extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jb_forgotPassword.setText("FORGOT PASSWORD");
+        jb_forgotPassword.setText("REGISTER");
         jb_forgotPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jb_forgotPasswordActionPerformed(evt);
@@ -119,13 +119,13 @@ public class GUILogin extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Employee Number and Password");
+        jLabel6.setText("Username and Password");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Please Enter your");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
         getContentPane().add(text_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 160, -1));
         getContentPane().add(text_user2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 160, -1));
 

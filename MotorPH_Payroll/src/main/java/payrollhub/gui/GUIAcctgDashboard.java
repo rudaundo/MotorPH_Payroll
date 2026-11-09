@@ -299,7 +299,23 @@ public class GUIAcctgDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_text_nameActionPerformed
 
     private void jb_empDashPayslipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashPayslipActionPerformed
-        // TODO add your handling code here:
+        
+        String employeeID = text_id.getText().trim();
+
+    try {
+        GUIPaySlip payslip = new GUIPaySlip(employeeID);
+        payslip.setVisible(true);
+
+    } catch (IOException | CsvException ex) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Unable to open Payslip Generation.\n" + ex.getMessage(),
+                "Payslip Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+        
     }//GEN-LAST:event_jb_empDashPayslipActionPerformed
 
     private void jb_empDashSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_empDashSignoutActionPerformed

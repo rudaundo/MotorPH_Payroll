@@ -48,7 +48,7 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="jb_forgotPassword">
       <Properties>
-        <Property name="text" type="java.lang.String" value="FORGOT PASSWORD"/>
+        <Property name="text" type="java.lang.String" value="REGISTER"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jb_forgotPasswordActionPerformed"/>
@@ -158,7 +158,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Employee Number and Password"/>
+        <Property name="text" type="java.lang.String" value="Username and Password"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -178,7 +178,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="70" y="120" width="-1" height="-1"/>
+          <AbsoluteConstraints x="30" y="120" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

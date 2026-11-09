@@ -266,7 +266,10 @@ public final class CsvHandler {
     /**
      * Updates a user using empNo as the identifier.
      */
-    public static boolean updateUser( String empNo, String[] updatedUser ) throws IOException {
+    public static boolean updateUser(
+            String empNo,
+            String[] updatedUser
+    ) throws IOException {
 
         return updateRecord(
                 USERS_FILE,
@@ -374,6 +377,19 @@ public final class CsvHandler {
                 OVERTIME_FILE,
                 OVERTIME_HEADER,
                 overtime
+        );
+    }
+    
+    public static boolean updateOvertime(
+            String overtimeID,
+            String[] updatedOvertime
+    ) throws IOException {
+
+        return updateRecord(
+                OVERTIME_FILE,
+                OVERTIME_HEADER,
+                overtimeID,
+                updatedOvertime
         );
     }
     
