@@ -140,9 +140,8 @@ mvn compile exec:java
 
 **Group 7, Section S2101**
 
-- Rowel Jepsani
-- Kristel Austria
 - Russell Jae Udaundo
+- Kristel Austria
 - Isabelle Angeli Gallardo
 
 ## Academic notice
