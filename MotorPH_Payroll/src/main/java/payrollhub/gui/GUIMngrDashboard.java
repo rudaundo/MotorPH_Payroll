@@ -7,17 +7,12 @@ package payrollhub.gui;
 import com.opencsv.exceptions.CsvException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import payrollhub.service.LogoutHandler;
 import payrollhub.data.CsvHandler;
-import payrollhub.service.AttendanceService;
-import util.startClock;
 
 
 
@@ -375,13 +370,34 @@ public class GUIMngrDashboard extends javax.swing.JFrame {
 
     private void jb_leaveApprovalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_leaveApprovalActionPerformed
         
-       
+        String employeeID = text_id.getText().trim();
+        
+        GUIMngrLeaveApproval nextForm = null;
+        try {
+            nextForm = new GUIMngrLeaveApproval(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIMngrDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIMngrDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
+        
         
     }//GEN-LAST:event_jb_leaveApprovalActionPerformed
 
     private void jb_overtimeApprovalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_overtimeApprovalActionPerformed
         
-       
+        String employeeID = text_id.getText().trim();
+        
+        GUIMngrOvertimeApproval nextForm = null;
+        try {
+            nextForm = new GUIMngrOvertimeApproval(employeeID);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIMngrDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CsvException ex) {
+            Logger.getLogger(GUIMngrDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextForm.setVisible(true); 
         
     }//GEN-LAST:event_jb_overtimeApprovalActionPerformed
 

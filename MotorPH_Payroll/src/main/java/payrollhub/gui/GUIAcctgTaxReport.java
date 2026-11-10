@@ -412,7 +412,57 @@ public class GUIAcctgTaxReport extends javax.swing.JFrame {
 
     private void jb_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cancelActionPerformed
 
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to reset the tax report form?",
+            "Confirm Reset",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+    );
 
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        // Clear date selection
+        jd_start.setDate(null);
+        jd_end.setDate(null);
+
+        // Reset employee selection
+        bg_employeeSelection.clearSelection();
+        jr_allEmp.setSelected(true);
+
+        // Hide employee dropdown
+        jc_employee.setVisible(false);
+
+        // Reset employee dropdown
+        if (jc_employee.getItemCount() > 0) {
+            jc_employee.setSelectedIndex(0);
+        }
+
+        // Clear tax report table
+        DefaultTableModel model =
+                (DefaultTableModel) tbl_taxReport.getModel();
+
+        model.setRowCount(0);
+
+        // Reset total tax
+        NumberFormat currencyFormat =
+                NumberFormat.getCurrencyInstance(
+                        Locale.forLanguageTag("en-PH")
+                );
+
+        jl_totalTax.setText(currencyFormat.format(BigDecimal.ZERO));
+
+        // Refresh form
+        revalidate();
+        repaint();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Tax report form has been reset.",
+                "Reset Successful",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }   
         
     }//GEN-LAST:event_jb_cancelActionPerformed
 
@@ -564,38 +614,7 @@ public class GUIAcctgTaxReport extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUIAcctgTaxReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
+       
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

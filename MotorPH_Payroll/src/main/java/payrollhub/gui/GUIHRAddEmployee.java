@@ -493,6 +493,7 @@ public class GUIHRAddEmployee extends javax.swing.JFrame {
 
     private void jb_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_clearActionPerformed
 
+         clearForm();
          generateEmployeeID();
          text_lname.requestFocus();
         

@@ -375,6 +375,49 @@ public class GUIAcctgPayrollGen extends javax.swing.JFrame {
 
     private void jb_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cancelActionPerformed
 
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to reset the payroll generation form?",
+            "Confirm Reset",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        // Clear payroll date selection
+        jd_start.setDate(null);
+        jd_end.setDate(null);
+
+        // Reset employee selection
+        bg_employeeSelection.clearSelection();
+        jr_allEmp.setSelected(true);
+
+        // Hide employee dropdown
+        jc_employee.setVisible(false);
+
+        // Clear employee dropdown selection
+        if (jc_employee.getItemCount() > 0) {
+            jc_employee.setSelectedIndex(0);
+        }
+
+        // Clear generated payroll table
+        DefaultTableModel model =
+                (DefaultTableModel) tbl_payroll.getModel();
+
+        model.setRowCount(0);
+
+        // Refresh the form
+        revalidate();
+        repaint();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Payroll generation form has been reset.",
+                "Reset Successful",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
         
     }//GEN-LAST:event_jb_cancelActionPerformed
 

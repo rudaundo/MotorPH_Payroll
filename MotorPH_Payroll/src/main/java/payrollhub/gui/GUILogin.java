@@ -56,7 +56,7 @@ public class GUILogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jb_forgotPassword = new javax.swing.JButton();
+        jb_register = new javax.swing.JButton();
         text_password = new javax.swing.JPasswordField();
         jb_login = new javax.swing.JButton();
         jc_level = new javax.swing.JComboBox<>();
@@ -77,13 +77,13 @@ public class GUILogin extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jb_forgotPassword.setText("REGISTER");
-        jb_forgotPassword.addActionListener(new java.awt.event.ActionListener() {
+        jb_register.setText("REGISTER");
+        jb_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_forgotPasswordActionPerformed(evt);
+                jb_registerActionPerformed(evt);
             }
         });
-        getContentPane().add(jb_forgotPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 180, -1));
+        getContentPane().add(jb_register, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 180, -1));
         getContentPane().add(text_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 160, -1));
 
         jb_login.setText("LOG IN");
@@ -147,9 +147,13 @@ public class GUILogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jc_levelActionPerformed
 
-    private void jb_forgotPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_forgotPasswordActionPerformed
+    private void jb_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_registerActionPerformed
 
-    }//GEN-LAST:event_jb_forgotPasswordActionPerformed
+        GUIRegistration nextForm = new GUIRegistration();
+        nextForm.setVisible(true); 
+        
+        
+    }//GEN-LAST:event_jb_registerActionPerformed
 
     private void jb_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_loginActionPerformed
         
@@ -242,7 +246,7 @@ public class GUILogin extends javax.swing.JFrame {
                 
             } else if ("Chief".equalsIgnoreCase(user.getrole())) {
 
-                GUIAcctgDashboard nextForm = new GUIAcctgDashboard(empID);
+                GUIMngrDashboard nextForm = new GUIMngrDashboard(empID);
 
                 nextForm.setVisible(true);
 
@@ -333,8 +337,8 @@ public class GUILogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JButton jb_forgotPassword;
     private javax.swing.JButton jb_login;
+    private javax.swing.JButton jb_register;
     private javax.swing.JComboBox<String> jc_level;
     private javax.swing.JPasswordField text_password;
     public javax.swing.JTextField text_user;
