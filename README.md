@@ -191,15 +191,14 @@ The test classes in the `test.java` package (`CalculatorTest`, `DedCalcTest`, `O
 - **CSV instead of a database.** The source data are spreadsheets and CSV files, and a database would add setup without serving the OOP goals.
 - **Payroll rules stay out of the screens.** SSS, PhilHealth and Pag-IBIG are in `DeductionCalculator`, and basic pay, overtime and withholding tax are in `PayrollCalculator`, so a UI change can never alter a computation.
 - **`BigDecimal` for money.** All money values use `BigDecimal` to avoid rounding errors.
-- **Hashed passwords.** New accounts are stored with PBKDF2 (`PasswordUtil`).
-- 
+- **Hashed passwords.** New accounts are stored with PBKDF2 hashes (`PasswordUtil`), and login checks them with `verifyPassword()`.
+  
 ## Known limitations
 
 - The Milestone 1 role classes and the classes in `contracts` are placeholders; role access is handled by the role check in `GUILogin` and by the service classes.
 - The leave and overtime approval screens call `CsvHandler` directly instead of going through a service class.
 - The sample accounts that were already in `users.csv` still use plain-text passwords; only newly registered accounts are hashed.
-- `AuthenticationService` prints login details to the console for debugging.
-
+  
 ## Testing
 
 Internal (smoke and unit tests) and external QA results are summarized in the final documentation (Section 4: Testing & Refinement Summary).
